@@ -195,6 +195,34 @@
   }
 }
 
+/* Input field text color fallback */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  color: #0f172a; /* slate-900 - dark text for light mode */
+}
+
+.dark input[type="text"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark textarea {
+  color: #f1f5f9; /* slate-100 - light text for dark mode */
+}
+
+/* Ensure placeholder is visible */
+input::placeholder,
+textarea::placeholder {
+  color: #94a3b8; /* slate-400 - medium gray */
+  opacity: 1;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #94a3b8; /* slate-400 - same in both modes */
+  opacity: 1;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
