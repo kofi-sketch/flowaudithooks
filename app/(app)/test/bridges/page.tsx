@@ -30,7 +30,7 @@ export default async function TestBridgesPage() {
           Bridge Tester
         </h1>
         <p className="text-lg text-[#a0a0a0]">
-          Vote on marketing bridges to find the winners
+          Vote on cold call bridges to find the winners
         </p>
       </div>
 

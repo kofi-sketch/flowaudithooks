@@ -30,7 +30,7 @@ export default async function TestHooksPage() {
           Hook Tester
         </h1>
         <p className="text-lg text-[#a0a0a0]">
-          Vote on marketing hooks to find the winners
+          Vote on cold call hooks to find the winners
         </p>
       </div>
 

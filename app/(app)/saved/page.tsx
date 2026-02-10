@@ -113,7 +113,7 @@ export default function SavedHooksPage() {
               Saved Content
             </h1>
             <p className="text-base text-[#a0a0a0]">
-              Your bookmarked marketing content
+              Your bookmarked cold call content
             </p>
           </div>
 

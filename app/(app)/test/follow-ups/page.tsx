@@ -30,7 +30,7 @@ export default async function TestFollowUpsPage() {
           Follow-up Tester
         </h1>
         <p className="text-lg text-[#a0a0a0]">
-          Vote on marketing follow-ups to find the winners
+          Vote on cold call follow-ups to find the winners
         </p>
       </div>
 

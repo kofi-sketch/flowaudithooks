@@ -57,7 +57,7 @@ export default function NewHookPage() {
         <div className="animate-[slide-up_0.4s_ease-out]">
           <h1 className="text-[32px] font-semibold text-white mb-2">Add New Content</h1>
           <p className="text-base text-[#a0a0a0]">
-            Add marketing content to test with your audience
+            Add cold call content to test with your audience
           </p>
         </div>
 

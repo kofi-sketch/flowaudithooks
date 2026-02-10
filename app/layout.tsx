@@ -10,8 +10,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Hook Tester - Test & Optimize Your Marketing Hooks",
-  description: "A powerful tool to test marketing hooks, collect feedback, and identify winners",
+  title: "Hook Tester - Test & Optimize Your Cold Call Hooks",
+  description: "A powerful tool to test cold call hooks, collect feedback, and identify winners",
 };
 
 export default function RootLayout({

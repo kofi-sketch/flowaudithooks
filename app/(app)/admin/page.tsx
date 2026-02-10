@@ -44,7 +44,7 @@ export default function AdminDashboard() {
             Library
           </h1>
           <p className="text-base text-[#a0a0a0]">
-            Manage and monitor your marketing content
+            Manage and monitor your cold call content
           </p>
         </div>
 
