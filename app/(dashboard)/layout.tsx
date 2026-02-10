@@ -52,6 +52,12 @@ export default async function DashboardLayout({
                   Add New Hook
                 </Link>
                 <Link
+                  href="/admin/hooks/import"
+                  className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
+                >
+                  Bulk Import
+                </Link>
+                <Link
                   href="/admin/flagged"
                   className="px-3 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 hover:bg-gray-50 rounded-md transition-colors"
                 >
