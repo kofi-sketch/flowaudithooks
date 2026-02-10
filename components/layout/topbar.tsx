@@ -2,6 +2,8 @@
 
 import { User } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Button from '@/components/ui/button';
 
 interface TopBarProps {
   user: {
@@ -28,13 +30,13 @@ export function TopBar({ user }: TopBarProps) {
   };
 
   return (
-    <header className="h-16 bg-[#2d2d2d] border-b border-[#353535] px-6 flex items-center justify-between">
+    <header className="h-16 bg-[#2d2d2d] border-b border-[#353535] px-6 lg:px-6 pl-16 lg:pl-6 flex items-center justify-between">
       {/* Left side - could add breadcrumbs or page title here */}
       <div className="flex-1" />
 
       {/* Right side - User profile & actions */}
       <div className="flex items-center gap-4">
-        {user && (
+        {user ? (
           <>
             {/* User info */}
             <div className="flex items-center gap-3 px-4 py-2 bg-[#2a2a2a] border border-[#353535] rounded-lg">
@@ -50,6 +52,13 @@ export function TopBar({ user }: TopBarProps) {
               Sign Out
             </button>
           </>
+        ) : (
+          // Show Sign In button for unauthenticated users
+          <Link href="/login">
+            <Button variant="primary" size="md">
+              Sign In
+            </Button>
+          </Link>
         )}
       </div>
     </header>

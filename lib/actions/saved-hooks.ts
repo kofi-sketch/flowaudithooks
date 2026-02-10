@@ -2,8 +2,9 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
+import type { ContentType } from '@/lib/types/database'
 
-export async function saveHook(hookId: string) {
+export async function saveHook(hookId: string, contentType: ContentType) {
   const supabase = await createClient()
 
   // Get current user
@@ -33,6 +34,7 @@ export async function saveHook(hookId: string) {
     .insert({
       user_id: user.id,
       hook_id: hookId,
+      content_type: contentType,
     })
 
   if (error) {
@@ -74,7 +76,7 @@ export async function unsaveHook(hookId: string) {
   return { success: true }
 }
 
-export async function getSavedHooks() {
+export async function getSavedHooks(contentType?: ContentType) {
   const supabase = await createClient()
 
   // Get current user
@@ -86,13 +88,14 @@ export async function getSavedHooks() {
     return { data: null, error: 'You must be logged in to view saved hooks' }
   }
 
-  // Get saved hooks with full hook data
-  const { data, error } = await supabase
+  // Build query
+  let query = supabase
     .from('saved_hooks')
     .select(`
       id,
       created_at,
       hook_id,
+      content_type,
       hooks:hook_id (
         id,
         text,
@@ -101,11 +104,18 @@ export async function getSavedHooks() {
         red_votes,
         green_percentage,
         is_flagged,
-        created_at
+        created_at,
+        content_type
       )
     `)
     .eq('user_id', user.id)
-    .order('created_at', { ascending: false })
+
+  // Add content type filter if provided
+  if (contentType) {
+    query = query.eq('content_type', contentType)
+  }
+
+  const { data, error } = await query.order('created_at', { ascending: false })
 
   if (error) {
     console.error('Error fetching saved hooks:', error)
@@ -115,7 +125,7 @@ export async function getSavedHooks() {
   return { data, error: null }
 }
 
-export async function isSaved(hookId: string) {
+export async function isSaved(hookId: string, contentType: ContentType) {
   const supabase = await createClient()
 
   // Get current user
@@ -132,6 +142,7 @@ export async function isSaved(hookId: string) {
     .select('id')
     .eq('user_id', user.id)
     .eq('hook_id', hookId)
+    .eq('content_type', contentType)
     .single()
 
   return { isSaved: !!data }

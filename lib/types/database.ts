@@ -31,6 +31,29 @@ export interface Database {
           created_at?: string
         }
       }
+      saved_hooks: {
+        Row: {
+          id: string
+          user_id: string
+          hook_id: string
+          created_at: string
+          content_type: ContentType
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          hook_id: string
+          created_at?: string
+          content_type: ContentType
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          hook_id?: string
+          created_at?: string
+          content_type?: ContentType
+        }
+      }
       hooks: {
         Row: {
           id: string

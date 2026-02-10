@@ -1,10 +1,6 @@
 import { getRandomHook, getTopContentToday, getTopContentThisWeek } from '@/lib/actions/hooks'
 import HookCard from '@/components/hooks/hook-card'
 import TopContent from '@/components/hooks/top-content'
-import Link from 'next/link'
-import { getCurrentUser } from '@/lib/actions/auth'
-import Button from '@/components/ui/button'
-import { Bookmark, LayoutDashboard } from 'lucide-react'
 
 export default async function TestBridgesPage() {
   const initialHook = await getRandomHook([], 'bridge')
@@ -13,9 +9,9 @@ export default async function TestBridgesPage() {
 
   if (!initialHook) {
     return (
-      <div className="min-h-screen bg-[#1a1a1a] flex items-center justify-center px-4">
-        <div className="crm-card text-center space-y-6 max-w-2xl animate-[scale-in_0.5s_ease-out]">
-          <h1 className="text-4xl md:text-5xl font-semibold text-white">
+      <div className="max-w-2xl mx-auto text-center py-20">
+        <div className="crm-card space-y-6">
+          <h1 className="text-4xl font-semibold text-white">
             No Bridges Available
           </h1>
           <p className="text-lg text-[#a0a0a0]">
@@ -26,50 +22,16 @@ export default async function TestBridgesPage() {
     )
   }
 
-  const user = await getCurrentUser()
-
   return (
-    <div className="min-h-screen bg-[#1a1a1a] px-4 py-8">
-      {/* Header */}
-      <div className="max-w-4xl mx-auto mb-12">
-        <div className="flex items-center justify-between flex-wrap gap-6">
-          <div className="animate-[slide-up_0.5s_ease-out]">
-            <h1 className="text-4xl md:text-5xl font-semibold text-white mb-3">
-              Bridge Tester
-            </h1>
-            <p className="text-lg text-[#a0a0a0]">
-              Vote on marketing bridges to find the winners
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3 animate-[slide-up_0.5s_ease-out_0.1s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.1s forwards' }}>
-            {user && (
-              <Link href="/saved">
-                <Button variant="outline" size="md" icon={<Bookmark className="w-4 h-4" />}>
-                  Saved
-                </Button>
-              </Link>
-            )}
-            {user?.is_admin && (
-              <Link href="/admin">
-                <Button variant="primary" size="md" icon={<LayoutDashboard className="w-4 h-4" />}>
-                  Dashboard
-                </Button>
-              </Link>
-            )}
-            {user ? (
-              <div className="px-4 py-2 bg-[#2d2d2d] border border-[#353535] rounded-lg text-sm font-medium text-white hidden sm:block">
-                {user.email}
-              </div>
-            ) : (
-              <Link href="/login">
-                <Button variant="secondary" size="md">
-                  Sign In
-                </Button>
-              </Link>
-            )}
-          </div>
-        </div>
+    <div className="space-y-8">
+      {/* Page Title */}
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-4xl font-semibold text-white mb-3">
+          Bridge Tester
+        </h1>
+        <p className="text-lg text-[#a0a0a0]">
+          Vote on marketing bridges to find the winners
+        </p>
       </div>
 
       {/* Main Content */}

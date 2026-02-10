@@ -5,17 +5,28 @@ import { usePathname } from 'next/navigation';
 import { LayoutDashboard, TestTube, Bookmark, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
-const navigation = [
-  { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { name: 'Test Hooks', href: '/test/hooks', icon: TestTube },
-  { name: 'Test Bridges', href: '/test/bridges', icon: TestTube },
-  { name: 'Test Follow-ups', href: '/test/follow-ups', icon: TestTube },
-  { name: 'Saved Content', href: '/saved', icon: Bookmark },
+const allNavigation = [
+  { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, adminOnly: true },
+  { name: 'Test Hooks', href: '/test/hooks', icon: TestTube, adminOnly: false },
+  { name: 'Test Bridges', href: '/test/bridges', icon: TestTube, adminOnly: false },
+  { name: 'Test Follow-ups', href: '/test/follow-ups', icon: TestTube, adminOnly: false },
+  { name: 'Saved Content', href: '/saved', icon: Bookmark, adminOnly: false },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  user: {
+    is_admin: boolean;
+  } | null;
+}
+
+export function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Filter navigation based on user role
+  const navigation = allNavigation.filter(item =>
+    !item.adminOnly || user?.is_admin
+  );
 
   const sidebarContent = (
     <>

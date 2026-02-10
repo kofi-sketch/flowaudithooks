@@ -34,7 +34,7 @@ export default function HookCard({ initialHook, contentType }: HookCardProps) {
   }, [hook.id])
 
   const checkIfSaved = async () => {
-    const result = await isSaved(hook.id)
+    const result = await isSaved(hook.id, contentType)
     setSaved(result.isSaved)
   }
 
@@ -105,7 +105,7 @@ export default function HookCard({ initialHook, contentType }: HookCardProps) {
     try {
       const result = saved
         ? await unsaveHook(hook.id)
-        : await saveHook(hook.id)
+        : await saveHook(hook.id, contentType)
 
       if ('error' in result) {
         toast.error(result.error)
