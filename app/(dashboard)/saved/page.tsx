@@ -98,7 +98,7 @@ export default function SavedHooksPage() {
           {/* Content */}
           {loading ? (
             <div className="flex justify-center py-20">
-              <LoadingSpinner size="xl" />
+              <LoadingSpinner size="lg" />
             </div>
           ) : savedHooks.length === 0 ? (
             <div className="text-center py-20 animate-[scale-in_0.5s_ease-out]">
