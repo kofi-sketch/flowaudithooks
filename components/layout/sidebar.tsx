@@ -6,11 +6,11 @@ import { LayoutDashboard, TestTube, Bookmark, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 const allNavigation = [
+  { name: 'Test Hooks', href: '/test/hooks', icon: TestTube, requiresAuth: false },
+  { name: 'Test Bridges', href: '/test/bridges', icon: TestTube, requiresAuth: false },
+  { name: 'Test Follow-ups', href: '/test/follow-ups', icon: TestTube, requiresAuth: false },
+  { name: 'Saved Content', href: '/saved', icon: Bookmark, requiresAuth: true },
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard, adminOnly: true },
-  { name: 'Test Hooks', href: '/test/hooks', icon: TestTube, adminOnly: false },
-  { name: 'Test Bridges', href: '/test/bridges', icon: TestTube, adminOnly: false },
-  { name: 'Test Follow-ups', href: '/test/follow-ups', icon: TestTube, adminOnly: false },
-  { name: 'Saved Content', href: '/saved', icon: Bookmark, adminOnly: false },
 ];
 
 interface SidebarProps {
@@ -23,10 +23,21 @@ export function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Filter navigation based on user role
-  const navigation = allNavigation.filter(item =>
-    !item.adminOnly || user?.is_admin
-  );
+  // Filter navigation based on user authentication and role
+  const navigation = allNavigation.filter(item => {
+    // Admin-only items: only show to admins
+    if (item.adminOnly) {
+      return user?.is_admin === true;
+    }
+
+    // Items requiring authentication: only show to authenticated users
+    if (item.requiresAuth) {
+      return user !== null;
+    }
+
+    // Public items: show to everyone
+    return true;
+  });
 
   const sidebarContent = (
     <>
