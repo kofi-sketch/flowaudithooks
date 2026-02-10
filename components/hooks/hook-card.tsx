@@ -140,17 +140,17 @@ export default function HookCard({ initialHook, contentType }: HookCardProps) {
         <button
           onClick={() => handleVote('green')}
           disabled={loading}
-          className="crm-card crm-hover flex flex-col items-center gap-3 py-8 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="crm-card crm-hover flex flex-col items-center gap-3 py-8 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:shadow-[0_0_20px_rgba(34,197,94,0.5)] hover:border-green-500/50 group"
         >
-          <ThumbsUp className="w-8 h-8 text-[#a0a0a0]" />
+          <ThumbsUp className="w-8 h-8 text-[#a0a0a0] transition-colors duration-300 group-hover:text-green-500" />
           <span className="text-base text-white">This Hook Works</span>
         </button>
         <button
           onClick={() => handleVote('red')}
           disabled={loading}
-          className="crm-card crm-hover flex flex-col items-center gap-3 py-8 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="crm-card crm-hover flex flex-col items-center gap-3 py-8 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:shadow-[0_0_20px_rgba(239,68,68,0.5)] hover:border-red-500/50 group"
         >
-          <ThumbsDown className="w-8 h-8 text-[#a0a0a0]" />
+          <ThumbsDown className="w-8 h-8 text-[#a0a0a0] transition-colors duration-300 group-hover:text-red-500" />
           <span className="text-base text-white">Needs Improvement</span>
         </button>
       </div>
