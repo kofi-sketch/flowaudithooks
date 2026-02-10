@@ -37,7 +37,17 @@ export default function SavedHooksPage() {
     try {
       const result = await getSavedHooks()
       if (result.data) {
-        setSavedHooks(result.data as SavedHook[])
+        // Transform Supabase data to match our interface
+        const transformedData = result.data
+          .map((item: any) => ({
+            id: item.id,
+            created_at: item.created_at,
+            hook_id: item.hook_id,
+            hooks: Array.isArray(item.hooks) ? item.hooks[0] : item.hooks
+          }))
+          .filter((item: any) => item.hooks) as SavedHook[]
+
+        setSavedHooks(transformedData)
       } else if (result.error) {
         toast.error(result.error)
       }
