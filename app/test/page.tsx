@@ -49,6 +49,14 @@ export default async function TestPage() {
 
             <div className="flex items-center gap-3 animate-[slide-up_0.5s_ease-out_0.1s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.1s forwards' }}>
               <ThemeToggle />
+              {user && (
+                <Link href="/saved">
+                  <Button variant="warning" size="md">
+                    <span className="text-xl mr-2">💾</span>
+                    Saved
+                  </Button>
+                </Link>
+              )}
               {user?.is_admin && (
                 <Link href="/admin">
                   <Button variant="primary" size="md">
@@ -99,7 +107,7 @@ export default async function TestPage() {
               <li className="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 dark:from-amber-500/20 dark:to-orange-500/20">
                 <span className="text-3xl">⭐</span>
                 <span className="flex-1 pt-1">
-                  Click <strong className="font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">"Save for Later"</strong> to bookmark without voting (doesn't affect stats)
+                  Click <strong className="font-bold bg-gradient-to-r from-amber-600 to-orange-600 bg-clip-text text-transparent">"Save"</strong> to bookmark hooks you like. Access them anytime from the Saved page!
                 </span>
               </li>
               <li className="flex items-start gap-4 p-4 rounded-xl bg-slate-100/50 dark:bg-slate-800/30">
