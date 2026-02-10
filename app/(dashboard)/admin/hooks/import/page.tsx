@@ -5,6 +5,7 @@ import Papa from 'papaparse'
 import { bulkCreateHooks, type BulkImportResult } from '@/lib/actions/hooks'
 import Link from 'next/link'
 import Button from '@/components/ui/button'
+import { ArrowLeft, FileText, Upload } from 'lucide-react'
 
 interface ParsedHook {
   text: string
@@ -157,39 +158,39 @@ export default function ImportHooksPage() {
       <div>
         <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
           <div className="animate-[slide-up_0.4s_ease-out]">
-            <h1 className="text-4xl font-bold gradient-text mb-2">Bulk Import Hooks</h1>
-            <p className="text-lg text-slate-600 dark:text-slate-400">
+            <h1 className="text-[32px] font-semibold text-white mb-2">Bulk Import Hooks</h1>
+            <p className="text-base text-[#a0a0a0]">
               Upload a CSV file to import multiple hooks at once
             </p>
           </div>
           <Link href="/admin">
-            <Button variant="ghost" size="md">
-              ← Back
+            <Button variant="ghost" size="sm" icon={<ArrowLeft className="w-4 h-4" />}>
+              Back
             </Button>
           </Link>
         </div>
 
         {/* CSV Format Info */}
-        <div className="glass-premium rounded-2xl p-6 mb-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 animate-[slide-up_0.5s_ease-out_0.1s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.1s forwards' }}>
-          <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-3 text-lg flex items-center gap-2">
-            <span className="text-xl">📋</span>
+        <div className="crm-card bg-[#2a2a2a] mb-6 animate-[slide-up_0.5s_ease-out_0.1s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.1s forwards' }}>
+          <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
+            <FileText className="w-5 h-5" />
             CSV Format
           </h3>
-          <p className="text-sm text-slate-700 dark:text-slate-300 mb-4">
+          <p className="text-sm text-[#a0a0a0] mb-4">
             Your CSV file should have one hook per row. You can use either format:
           </p>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <p className="text-xs font-mono font-semibold text-slate-900 dark:text-slate-100 mb-2">Simple (single column):</p>
-              <pre className="text-xs glass p-3 rounded-xl overflow-x-auto text-slate-700 dark:text-slate-300">
+              <p className="text-xs font-mono font-medium text-white mb-2">Simple (single column):</p>
+              <pre className="text-xs bg-[#2d2d2d] border border-[#353535] p-3 rounded-lg overflow-x-auto text-[#a0a0a0]">
 text
 Hook text here
 Another hook here
               </pre>
             </div>
             <div>
-              <p className="text-xs font-mono font-semibold text-slate-900 dark:text-slate-100 mb-2">With headers:</p>
-              <pre className="text-xs glass p-3 rounded-xl overflow-x-auto text-slate-700 dark:text-slate-300">
+              <p className="text-xs font-mono font-medium text-white mb-2">With headers:</p>
+              <pre className="text-xs bg-[#2d2d2d] border border-[#353535] p-3 rounded-lg overflow-x-auto text-[#a0a0a0]">
 text,notes
 Hook text here,Optional note
 Another hook here,Another note
@@ -199,13 +200,12 @@ Another hook here,Another note
         </div>
 
         {/* File Upload */}
-        <div className="glass-premium rounded-2xl border-2 border-dashed border-indigo-300 dark:border-indigo-600 p-12 hover:border-indigo-400 dark:hover:border-indigo-500 transition-all duration-300 animate-[slide-up_0.5s_ease-out_0.2s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.2s forwards' }}>
-          <div className="text-center">
-            <div className="text-6xl mb-6">📁</div>
+        <div className="crm-card border-2 border-dashed border-[#404040] hover:border-[#505050] transition-colors animate-[slide-up_0.5s_ease-out_0.2s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.2s forwards' }}>
+          <div className="text-center py-8">
+            <Upload className="w-16 h-16 text-[#a0a0a0] mx-auto mb-6" />
             <div className="mt-4">
               <label htmlFor="file-upload">
                 <Button variant="primary" size="lg" className="cursor-pointer">
-                  <span className="text-2xl">📤</span>
                   Choose CSV File
                 </Button>
               </label>
@@ -217,7 +217,7 @@ Another hook here,Another note
                 className="hidden"
               />
             </div>
-            <p className="mt-4 text-sm font-medium text-slate-600 dark:text-slate-400">
+            <p className="mt-4 text-sm font-medium text-[#a0a0a0]">
               {fileName || 'CSV files only'}
             </p>
           </div>
@@ -226,74 +226,67 @@ Another hook here,Another note
 
       {/* Preview Table */}
       {parsedData.length > 0 && !results && (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-8">
-          <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
-            <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-lg font-semibold text-gray-900">Preview</h2>
-                <p className="text-sm text-gray-600 mt-1">
-                  {validCount} valid · {invalidCount} invalid
-                  {parsedData.length > 100 && ` (showing first 100 of ${parsedData.length})`}
-                </p>
-              </div>
-              <button
-                onClick={handleImport}
-                disabled={importing || validCount === 0}
-                className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
-              >
-                {importing ? 'Importing...' : `Import ${validCount} Hooks`}
-              </button>
+        <div className="crm-card">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-lg font-semibold text-white">Preview</h2>
+              <p className="text-sm text-[#a0a0a0] mt-1">
+                {validCount} valid · {invalidCount} invalid
+                {parsedData.length > 100 && ` (showing first 100 of ${parsedData.length})`}
+              </p>
             </div>
+            <Button
+              onClick={handleImport}
+              disabled={importing || validCount === 0}
+              variant="primary"
+              size="md"
+            >
+              {importing ? 'Importing...' : `Import ${validCount} Hooks`}
+            </Button>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+            <table className="min-w-full">
+              <thead>
+                <tr className="border-b border-[#353535]">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#a0a0a0] uppercase tracking-wider bg-[#2a2a2a]">
                     Row
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#a0a0a0] uppercase tracking-wider bg-[#2a2a2a]">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#a0a0a0] uppercase tracking-wider bg-[#2a2a2a]">
                     Hook Text
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className="divide-y divide-[#353535]">
                 {parsedData.slice(0, 100).map((hook, index) => (
                   <tr
                     key={index}
-                    className={
-                      hook.status === 'valid'
-                        ? 'bg-green-50'
-                        : hook.status === 'invalid'
-                        ? 'bg-red-50'
-                        : 'bg-yellow-50'
-                    }
+                    className={index % 2 === 0 ? 'bg-[#2d2d2d]' : 'bg-[#2a2a2a]'}
                   >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-white">
                       {hook.row}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {hook.status === 'valid' && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-lg text-xs font-medium bg-[#353535] border border-[#404040] text-white">
                           ✓ Valid
                         </span>
                       )}
                       {hook.status === 'invalid' && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-lg text-xs font-medium bg-[#353535] border border-[#404040] text-[#a0a0a0]">
                           ✗ {hook.reason}
                         </span>
                       )}
                       {hook.status === 'duplicate' && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-lg text-xs font-medium bg-[#353535] border border-[#404040] text-[#a0a0a0]">
                           ⚠ Duplicate
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-sm text-gray-900">
+                    <td className="px-6 py-4 text-sm text-white">
                       {hook.text || '(empty)'}
                     </td>
                   </tr>
@@ -306,36 +299,36 @@ Another hook here,Another note
 
       {/* Results Summary */}
       {results && (
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Import Results</h2>
+        <div className="crm-card">
+          <h2 className="text-lg font-semibold text-white mb-4">Import Results</h2>
 
           <div className="grid md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-              <div className="text-3xl font-bold text-green-700">{results.created}</div>
-              <div className="text-sm text-green-600">Hooks Created</div>
+            <div className="bg-[#2a2a2a] border border-[#353535] rounded-lg p-4">
+              <div className="text-3xl font-bold text-white">{results.created}</div>
+              <div className="text-sm text-[#a0a0a0]">Hooks Created</div>
             </div>
 
-            <div className="bg-yellow-50 rounded-lg p-4 border border-yellow-200">
-              <div className="text-3xl font-bold text-yellow-700">{results.skipped}</div>
-              <div className="text-sm text-yellow-600">Duplicates Skipped</div>
+            <div className="bg-[#2a2a2a] border border-[#353535] rounded-lg p-4">
+              <div className="text-3xl font-bold text-white">{results.skipped}</div>
+              <div className="text-sm text-[#a0a0a0]">Duplicates Skipped</div>
             </div>
 
-            <div className="bg-red-50 rounded-lg p-4 border border-red-200">
-              <div className="text-3xl font-bold text-red-700">{results.errors.length}</div>
-              <div className="text-sm text-red-600">Errors</div>
+            <div className="bg-[#2a2a2a] border border-[#353535] rounded-lg p-4">
+              <div className="text-3xl font-bold text-white">{results.errors.length}</div>
+              <div className="text-sm text-[#a0a0a0]">Errors</div>
             </div>
           </div>
 
           {results.errors.length > 0 && (
-            <div className="border-t border-gray-200 pt-4">
-              <h3 className="font-medium text-gray-900 mb-2">Errors:</h3>
+            <div className="border-t border-[#353535] pt-4">
+              <h3 className="font-medium text-white mb-2">Errors:</h3>
               <div className="space-y-2">
                 {results.errors.map((error, index) => (
-                  <div key={index} className="text-sm bg-red-50 p-3 rounded border border-red-200">
-                    <span className="font-medium text-red-900">Row {error.row}:</span>{' '}
-                    <span className="text-red-700">{error.reason}</span>
+                  <div key={index} className="text-sm bg-[#2a2a2a] border border-[#353535] p-3 rounded-lg">
+                    <span className="font-medium text-white">Row {error.row}:</span>{' '}
+                    <span className="text-[#a0a0a0]">{error.reason}</span>
                     {error.text && (
-                      <div className="text-xs text-red-600 mt-1 truncate">{error.text}</div>
+                      <div className="text-xs text-[#6b6b6b] mt-1 truncate">{error.text}</div>
                     )}
                   </div>
                 ))}
@@ -344,22 +337,22 @@ Another hook here,Another note
           )}
 
           <div className="mt-6 flex gap-3">
-            <Link
-              href="/admin"
-              className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors"
-            >
-              View All Hooks
+            <Link href="/admin">
+              <Button variant="primary" size="md">
+                View All Hooks
+              </Button>
             </Link>
-            <button
+            <Button
               onClick={() => {
                 setResults(null)
                 setParsedData([])
                 setFileName('')
               }}
-              className="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors"
+              variant="ghost"
+              size="md"
             >
               Import Another File
-            </button>
+            </Button>
           </div>
         </div>
       )}

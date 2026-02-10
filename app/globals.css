@@ -1,94 +1,56 @@
 @import "tailwindcss";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/600.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* CRM Dark Theme - Monochrome Palette */
+  --background: #1a1a1a;
+  --foreground: #ffffff;
 
-  /* Premium Color Palette - Light Mode */
-  --primary-gradient-start: #4f46e5;
-  --primary-gradient-mid: #9333ea;
-  --primary-gradient-end: #db2777;
+  /* Backgrounds */
+  --bg-primary: #1a1a1a;
+  --bg-secondary: #2a2a2a;
+  --bg-card: #2d2d2d;
+  --bg-hover: #3a3a3a;
 
-  --success-gradient-start: #10b981;
-  --success-gradient-end: #059669;
+  /* Borders */
+  --border-default: #353535;
+  --border-accent: #404040;
 
-  --warning-gradient-start: #fbbf24;
-  --warning-gradient-end: #f59e0b;
-
-  --error-gradient-start: #f43f5e;
-  --error-gradient-end: #dc2626;
-
-  --info-gradient-start: #3b82f6;
-  --info-gradient-end: #06b6d4;
-
-  /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --glass-shadow: rgba(99, 102, 241, 0.1);
+  /* Text */
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --text-muted: #6b6b6b;
 
   /* Shadows */
-  --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.15);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 
-.dark {
-  --background: #0a0a0a;
-  --foreground: #ededed;
-
-  /* Premium Color Palette - Dark Mode */
-  --primary-gradient-start: #6366f1;
-  --primary-gradient-mid: #a855f7;
-  --primary-gradient-end: #ec4899;
-
-  --success-gradient-start: #34d399;
-  --success-gradient-end: #10b981;
-
-  --warning-gradient-start: #fcd34d;
-  --warning-gradient-end: #fbbf24;
-
-  --error-gradient-start: #fb7185;
-  --error-gradient-end: #f43f5e;
-
-  --info-gradient-start: #60a5fa;
-  --info-gradient-end: #22d3ee;
-
-  /* Glassmorphism - Dark Mode */
-  --glass-bg: rgba(15, 23, 42, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --glass-shadow: rgba(99, 102, 241, 0.2);
+/* CRM Card Utility */
+.crm-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-default);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow-md);
 }
 
-
-/* Premium Animations */
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
+/* CRM Hover Effect */
+.crm-hover {
+  transition: all 150ms ease-in-out;
 }
 
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
+.crm-hover:hover {
+  filter: brightness(1.1);
 }
 
-@keyframes pulse-glow {
-  0%, 100% {
-    opacity: 1;
-    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
-  }
-  50% {
-    opacity: 0.8;
-    box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
-  }
+.crm-hover:active {
+  transform: scale(0.98);
 }
 
+/* Minimal Animations */
 @keyframes slide-up {
   from {
     opacity: 0;
@@ -111,77 +73,29 @@
   }
 }
 
-@keyframes gradient-shift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+/* Input field styling */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  color: var(--text-primary);
+  background: var(--bg-card);
+  border-color: var(--border-default);
 }
 
-/* Glassmorphic utilities */
-.glass {
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--border-accent);
 }
 
-.glass-premium {
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  box-shadow: var(--shadow-premium), var(--shadow-glow);
-}
-
-/* Premium gradient text */
-.gradient-text {
-  background: linear-gradient(
-    135deg,
-    var(--primary-gradient-start),
-    var(--primary-gradient-mid),
-    var(--primary-gradient-end)
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-size: 200% 200%;
-  animation: gradient-shift 4s ease infinite;
-}
-
-/* Premium button effects */
-.btn-premium {
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-premium::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.2);
-  transform: translate(-50%, -50%);
-  transition: width 0.6s, height 0.6s;
-}
-
-.btn-premium:active::before {
-  width: 300px;
-  height: 300px;
-}
-
-/* Smooth transitions */
-* {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+/* Placeholder styling */
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
 }
 
 /* Reduced motion support */
@@ -195,39 +109,17 @@
   }
 }
 
-/* Input field text color fallback */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-textarea {
-  color: #0f172a; /* slate-900 - dark text for light mode */
-}
-
-.dark input[type="text"],
-.dark input[type="email"],
-.dark input[type="password"],
-.dark textarea {
-  color: #f1f5f9; /* slate-100 - light text for dark mode */
-}
-
-/* Ensure placeholder is visible */
-input::placeholder,
-textarea::placeholder {
-  color: #94a3b8; /* slate-400 - medium gray */
-  opacity: 1;
-}
-
-.dark input::placeholder,
-.dark textarea::placeholder {
-  color: #94a3b8; /* slate-400 - same in both modes */
-  opacity: 1;
-}
-
+/* Enforce dark mode on body */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-feature-settings: 'rlig' 1, 'calt' 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Ensure html also uses dark background */
+html {
+  background: var(--bg-primary);
 }

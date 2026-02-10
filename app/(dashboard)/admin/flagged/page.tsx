@@ -1,42 +1,43 @@
 import { getFlaggedHooks } from '@/lib/actions/hooks'
 import HookStatsTable from '@/components/hooks/hook-stats-table'
 import Link from 'next/link'
+import Button from '@/components/ui/button'
+import { ArrowLeft, AlertTriangle } from 'lucide-react'
 
 export default async function FlaggedHooksPage() {
   const flaggedHooks = await getFlaggedHooks()
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Flagged Hooks</h1>
-          <p className="text-gray-600 mt-1">
+          <h1 className="text-[32px] font-semibold text-white mb-2">Flagged Hooks</h1>
+          <p className="text-base text-[#a0a0a0]">
             Hooks with less than 40% positive votes after 10+ votes
           </p>
         </div>
 
-        <Link
-          href="/admin"
-          className="px-4 py-2 text-gray-600 hover:text-gray-900 font-medium transition-colors"
-        >
-          ← Back to All Hooks
+        <Link href="/admin">
+          <Button variant="ghost" size="sm" icon={<ArrowLeft className="w-4 h-4" />}>
+            Back to All Hooks
+          </Button>
         </Link>
       </div>
 
       {/* Info Banner */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+      <div className="crm-card bg-[#2a2a2a]">
         <div className="flex items-start gap-3">
-          <span className="text-2xl">⚠️</span>
+          <AlertTriangle className="w-6 h-6 text-[#a0a0a0] flex-shrink-0 mt-1" />
           <div>
-            <h3 className="font-semibold text-yellow-900">About Flagged Hooks</h3>
-            <p className="text-sm text-yellow-800 mt-1">
+            <h3 className="font-semibold text-white mb-2">About Flagged Hooks</h3>
+            <p className="text-sm text-[#a0a0a0] mb-3">
               These hooks have underperformed based on user feedback. Review them to decide whether to:
             </p>
-            <ul className="text-sm text-yellow-800 mt-2 space-y-1 ml-4">
-              <li>• <strong>Delete</strong> - Remove permanently if consistently poor</li>
-              <li>• <strong>Unflag</strong> - Keep active if you want to give it more chances</li>
-              <li>• <strong>Edit</strong> - Revise the hook text and test again (coming soon)</li>
+            <ul className="text-sm text-[#a0a0a0] space-y-1.5">
+              <li>• <strong className="text-white">Delete</strong> - Remove permanently if consistently poor</li>
+              <li>• <strong className="text-white">Unflag</strong> - Keep active if you want to give it more chances</li>
+              <li>• <strong className="text-white">Edit</strong> - Revise the hook text and test again (coming soon)</li>
             </ul>
           </div>
         </div>
@@ -44,25 +45,23 @@ export default async function FlaggedHooksPage() {
 
       {/* Flagged Hooks Table */}
       {flaggedHooks.length === 0 ? (
-        <div className="bg-white rounded-lg shadow p-12 text-center">
-          <span className="text-6xl mb-4 block">🎉</span>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <div className="crm-card text-center py-16">
+          <h2 className="text-2xl font-semibold text-white mb-2">
             No Flagged Hooks!
           </h2>
-          <p className="text-gray-600">
+          <p className="text-base text-[#a0a0a0] mb-8">
             All your hooks are performing well. Great job!
           </p>
-          <Link
-            href="/admin"
-            className="inline-block mt-6 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-md transition-colors"
-          >
-            View All Hooks
+          <Link href="/admin">
+            <Button variant="primary" size="lg">
+              View All Hooks
+            </Button>
           </Link>
         </div>
       ) : (
         <>
-          <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-sm text-red-800">
+          <div className="px-4 py-3 bg-[#2a2a2a] border border-[#353535] rounded-lg">
+            <p className="text-sm text-white">
               <strong>{flaggedHooks.length}</strong> {flaggedHooks.length === 1 ? 'hook' : 'hooks'} flagged for review
             </p>
           </div>

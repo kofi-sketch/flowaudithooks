@@ -9,6 +9,7 @@ import { toast } from 'sonner'
 import type { Hook } from '@/lib/types/database'
 import Button from '@/components/ui/button'
 import LoadingSpinner from '@/components/ui/loading-spinner'
+import { ThumbsUp, ThumbsDown, Bookmark } from 'lucide-react'
 
 interface HookCardProps {
   initialHook: Hook
@@ -120,86 +121,62 @@ export default function HookCard({ initialHook }: HookCardProps) {
 
   return (
     <div className="w-full max-w-2xl mx-auto animate-[slide-up_0.5s_ease-out]">
-      {/* Hook Display Card - Premium Glassmorphic Design */}
-      <div className="group relative mb-8">
-        <div className="glass-premium rounded-3xl p-10 md:p-12 min-h-[320px] flex items-center justify-center transition-all duration-500 hover:shadow-2xl">
-          <div className="text-center space-y-6">
-            <p className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100 leading-relaxed tracking-tight">
-              {hook.text}
-            </p>
-
-            {/* Stats Display - Enhanced with gradients */}
-            <div className="flex justify-center gap-6 text-sm pt-6">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800/50">
-                <span className="text-slate-600 dark:text-slate-400">
-                  {hook.total_votes} {hook.total_votes === 1 ? 'vote' : 'votes'}
-                </span>
-              </div>
-              {hook.total_votes > 0 && (
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/10 to-green-500/10 dark:from-emerald-500/20 dark:to-green-500/20">
-                  <span className="font-semibold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
-                    {hook.green_percentage.toFixed(0)}% positive
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
+      {/* Hook Display Card */}
+      <div className="crm-card mb-6">
+        <p className="text-2xl font-normal text-white leading-relaxed text-center">
+          {hook.text}
+        </p>
+        <div className="flex gap-4 mt-6 text-sm text-[#a0a0a0] justify-center">
+          <span>{hook.total_votes} {hook.total_votes === 1 ? 'vote' : 'votes'}</span>
+          {hook.total_votes > 0 && (
+            <span>{hook.green_percentage.toFixed(0)}% positive</span>
+          )}
         </div>
-
-        {/* Glow effect on hover */}
-        <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-10 blur-2xl transition-opacity duration-500 -z-10" />
       </div>
 
-      {/* Voting Buttons - Premium with gradients */}
-      <div className="grid grid-cols-2 gap-5 mb-5">
-        <Button
+      {/* Voting Interface */}
+      <div className="grid grid-cols-2 gap-6 mb-6">
+        <button
           onClick={() => handleVote('green')}
           disabled={loading}
-          variant="success"
-          size="xl"
-          className="flex-col !py-8"
+          className="crm-card crm-hover flex flex-col items-center gap-3 py-8 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span className="text-5xl mb-2">✅</span>
-          <span className="text-xl">Worked!</span>
-        </Button>
-
-        <Button
+          <ThumbsUp className="w-8 h-8 text-[#a0a0a0]" />
+          <span className="text-base text-white">This Hook Works</span>
+        </button>
+        <button
           onClick={() => handleVote('red')}
           disabled={loading}
-          variant="danger"
-          size="xl"
-          className="flex-col !py-8"
+          className="crm-card crm-hover flex flex-col items-center gap-3 py-8 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span className="text-5xl mb-2">❌</span>
-          <span className="text-xl">Didn't Work</span>
-        </Button>
+          <ThumbsDown className="w-8 h-8 text-[#a0a0a0]" />
+          <span className="text-base text-white">Needs Improvement</span>
+        </button>
       </div>
 
       {/* Secondary Actions */}
-      <div className="grid grid-cols-2 gap-5">
+      <div className="flex items-center justify-between">
         <Button
           onClick={handleSaveToggle}
           disabled={loading || savingLoading}
-          variant={saved ? "success" : "warning"}
-          size="lg"
+          variant={saved ? "primary" : "outline"}
+          size="md"
+          icon={<Bookmark className={`w-4 h-4 ${saved ? 'fill-white' : ''}`} />}
         >
-          <span className="text-3xl">{saved ? '💾' : '⭐'}</span>
-          <span>{saved ? 'Saved!' : 'Save'}</span>
+          {saved ? 'Saved' : 'Save Hook'}
         </Button>
 
-        <Button
+        <button
           onClick={handleSkip}
           disabled={loading}
-          variant="ghost"
-          size="lg"
+          className="text-sm text-[#6b6b6b] hover:text-white transition-colors duration-150 disabled:opacity-50"
         >
-          <span className="text-3xl">→</span>
-          <span>Skip</span>
-        </Button>
+          Skip this hook
+        </button>
       </div>
 
       {loading && (
-        <div className="mt-8">
+        <div className="mt-8 flex justify-center">
           <LoadingSpinner size="lg" />
         </div>
       )}

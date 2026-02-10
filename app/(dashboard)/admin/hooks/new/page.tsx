@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import Link from 'next/link'
 import Button from '@/components/ui/button'
+import { ArrowLeft, Lightbulb, Target } from 'lucide-react'
 
 export default function NewHookPage() {
   const [text, setText] = useState('')
@@ -51,24 +52,24 @@ export default function NewHookPage() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="animate-[slide-up_0.4s_ease-out]">
-          <h1 className="text-4xl font-bold gradient-text mb-2">Add New Hook</h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <h1 className="text-[32px] font-semibold text-white mb-2">Add New Hook</h1>
+          <p className="text-base text-[#a0a0a0]">
             Add a marketing hook to test with your audience
           </p>
         </div>
 
         <Link href="/admin">
-          <Button variant="ghost" size="md">
-            ← Back
+          <Button variant="ghost" size="sm" icon={<ArrowLeft className="w-4 h-4" />}>
+            Back
           </Button>
         </Link>
       </div>
 
       {/* Form */}
-      <div className="glass-premium rounded-2xl p-8 animate-[slide-up_0.5s_ease-out_0.1s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.1s forwards' }}>
+      <div className="crm-card animate-[slide-up_0.5s_ease-out_0.1s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.1s forwards' }}>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="hook-text" className="block text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">
+            <label htmlFor="hook-text" className="block text-sm font-medium text-white mb-3">
               Hook Text
             </label>
             <textarea
@@ -76,16 +77,16 @@ export default function NewHookPage() {
               value={text}
               onChange={(e) => setText(e.target.value)}
               rows={5}
-              className="block w-full px-5 py-4 glass rounded-xl border-2 border-transparent focus:border-indigo-500 dark:focus:border-indigo-400 focus:outline-none transition-all duration-200 text-slate-900 dark:text-slate-100 placeholder-slate-400 resize-none text-lg"
+              className="block w-full px-5 py-4 bg-[#2a2a2a] border border-[#353535] rounded-lg focus:border-[#404040] focus:outline-none transition-colors text-white placeholder-[#6b6b6b] resize-none text-base"
               placeholder="Enter your marketing hook here..."
               required
             />
             <div className="mt-3 flex items-center justify-between">
-              <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+              <p className="text-sm text-[#a0a0a0]">
                 {text.length} characters
               </p>
-              <div className={`text-sm font-semibold ${text.length > 200 ? 'text-amber-600 dark:text-amber-400' : 'text-green-600 dark:text-green-400'}`}>
-                {text.length > 200 ? '⚠️ Consider shortening' : '✓ Good length'}
+              <div className={`text-sm font-medium ${text.length > 200 ? 'text-[#a0a0a0]' : 'text-white'}`}>
+                {text.length > 200 ? '⚠ Consider shortening' : '✓ Good length'}
               </div>
             </div>
           </div>
@@ -115,12 +116,12 @@ export default function NewHookPage() {
       </div>
 
       {/* Example Hooks */}
-      <div className="glass-premium rounded-2xl p-8 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 animate-[slide-up_0.5s_ease-out_0.2s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.2s forwards' }}>
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-2 flex items-center gap-2">
-          <span className="text-2xl">💡</span>
+      <div className="crm-card bg-[#2a2a2a] animate-[slide-up_0.5s_ease-out_0.2s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.2s forwards' }}>
+        <h2 className="text-xl font-semibold text-white mb-2 flex items-center gap-2">
+          <Lightbulb className="w-6 h-6" />
           Example Hook Templates
         </h2>
-        <p className="text-sm text-slate-600 dark:text-slate-400 mb-5">
+        <p className="text-sm text-[#a0a0a0] mb-5">
           Click on any example to use it as a starting point:
         </p>
         <div className="space-y-3">
@@ -128,7 +129,7 @@ export default function NewHookPage() {
             <button
               key={index}
               onClick={() => setText(example)}
-              className="block w-full text-left px-5 py-4 glass rounded-xl hover:bg-white/50 dark:hover:bg-slate-800/50 border border-white/20 dark:border-slate-700/50 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all duration-200 text-sm font-medium text-slate-700 dark:text-slate-300 hover:shadow-lg hover:scale-[1.02]"
+              className="block w-full text-left px-5 py-4 bg-[#2d2d2d] border border-[#353535] rounded-lg hover:bg-[#3a3a3a] transition-colors text-sm text-white"
             >
               {example}
             </button>
@@ -137,34 +138,34 @@ export default function NewHookPage() {
       </div>
 
       {/* Tips */}
-      <div className="glass-premium rounded-2xl p-8 bg-gradient-to-br from-emerald-500/10 to-green-500/10 dark:from-emerald-500/20 dark:to-green-500/20 animate-[slide-up_0.5s_ease-out_0.3s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.3s forwards' }}>
-        <h2 className="text-xl font-bold text-slate-900 dark:text-slate-100 mb-5 flex items-center gap-2">
-          <span className="text-2xl">🎯</span>
+      <div className="crm-card bg-[#2a2a2a] animate-[slide-up_0.5s_ease-out_0.3s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.3s forwards' }}>
+        <h2 className="text-xl font-semibold text-white mb-5 flex items-center gap-2">
+          <Target className="w-6 h-6" />
           Tips for Great Hooks
         </h2>
         <ul className="space-y-4">
-          <li className="flex items-start gap-4 p-4 rounded-xl bg-white/50 dark:bg-slate-800/30">
-            <span className="text-2xl">✓</span>
-            <span className="flex-1 pt-1 text-slate-700 dark:text-slate-300">
-              <strong className="font-bold text-slate-900 dark:text-slate-100">Be specific and concrete</strong> - use numbers, timeframes, outcomes
+          <li className="flex items-start gap-4 p-4 rounded-lg bg-[#2d2d2d] border border-[#353535]">
+            <span className="text-white">✓</span>
+            <span className="flex-1 text-[#a0a0a0]">
+              <strong className="text-white">Be specific and concrete</strong> - use numbers, timeframes, outcomes
             </span>
           </li>
-          <li className="flex items-start gap-4 p-4 rounded-xl bg-white/50 dark:bg-slate-800/30">
-            <span className="text-2xl">✓</span>
-            <span className="flex-1 pt-1 text-slate-700 dark:text-slate-300">
-              <strong className="font-bold text-slate-900 dark:text-slate-100">Trigger curiosity or emotion</strong>
+          <li className="flex items-start gap-4 p-4 rounded-lg bg-[#2d2d2d] border border-[#353535]">
+            <span className="text-white">✓</span>
+            <span className="flex-1 text-[#a0a0a0]">
+              <strong className="text-white">Trigger curiosity or emotion</strong>
             </span>
           </li>
-          <li className="flex items-start gap-4 p-4 rounded-xl bg-white/50 dark:bg-slate-800/30">
-            <span className="text-2xl">✓</span>
-            <span className="flex-1 pt-1 text-slate-700 dark:text-slate-300">
-              <strong className="font-bold text-slate-900 dark:text-slate-100">Address a specific pain point</strong> or desire
+          <li className="flex items-start gap-4 p-4 rounded-lg bg-[#2d2d2d] border border-[#353535]">
+            <span className="text-white">✓</span>
+            <span className="flex-1 text-[#a0a0a0]">
+              <strong className="text-white">Address a specific pain point</strong> or desire
             </span>
           </li>
-          <li className="flex items-start gap-4 p-4 rounded-xl bg-white/50 dark:bg-slate-800/30">
-            <span className="text-2xl">✓</span>
-            <span className="flex-1 pt-1 text-slate-700 dark:text-slate-300">
-              <strong className="font-bold text-slate-900 dark:text-slate-100">Keep it under 200 characters</strong> for best results
+          <li className="flex items-start gap-4 p-4 rounded-lg bg-[#2d2d2d] border border-[#353535]">
+            <span className="text-white">✓</span>
+            <span className="flex-1 text-[#a0a0a0]">
+              <strong className="text-white">Keep it under 200 characters</strong> for best results
             </span>
           </li>
         </ul>
