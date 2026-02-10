@@ -4,6 +4,8 @@ import { useState } from 'react'
 import { signIn, signUp } from '@/lib/actions/auth'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import GradientBackground from '@/components/ui/gradient-background'
+import Button from '@/components/ui/button'
 
 export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false)
@@ -36,93 +38,103 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl">
-        <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">
-            {isSignUp ? 'Create Account' : 'Welcome Back'}
-          </h2>
-          <p className="mt-2 text-sm text-gray-600">
-            {isSignUp
-              ? 'Sign up to start testing hooks'
-              : 'Sign in to your account'}
-          </p>
-        </div>
-
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="you@example.com"
-              />
+    <>
+      <GradientBackground />
+      <div className="relative min-h-screen flex items-center justify-center px-4 py-12">
+        <div className="max-w-md w-full space-y-8 animate-[scale-in_0.5s_ease-out]">
+          <div className="glass-premium p-10 rounded-3xl">
+            {/* Header */}
+            <div className="text-center mb-8">
+              <div className="text-5xl mb-4">🪝</div>
+              <h2 className="text-4xl font-bold gradient-text mb-3">
+                {isSignUp ? 'Create Account' : 'Welcome Back'}
+              </h2>
+              <p className="text-slate-600 dark:text-slate-400">
+                {isSignUp
+                  ? 'Sign up to start testing hooks'
+                  : 'Sign in to your account'}
+              </p>
             </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                autoComplete={isSignUp ? 'new-password' : 'current-password'}
-                required
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                placeholder="••••••••"
-                minLength={6}
-              />
-              {isSignUp && (
-                <p className="mt-1 text-xs text-gray-500">
-                  Password must be at least 6 characters
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div className="space-y-5">
+                <div>
+                  <label htmlFor="email" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                    Email address
+                  </label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="block w-full px-4 py-3 glass rounded-xl border-2 border-transparent focus:border-indigo-500 dark:focus:border-indigo-400 focus:outline-none transition-all duration-200 text-slate-900 dark:text-slate-100 placeholder-slate-400"
+                    placeholder="you@example.com"
+                  />
+                </div>
+
+                <div>
+                  <label htmlFor="password" className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+                    Password
+                  </label>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autoComplete={isSignUp ? 'new-password' : 'current-password'}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="block w-full px-4 py-3 glass rounded-xl border-2 border-transparent focus:border-indigo-500 dark:focus:border-indigo-400 focus:outline-none transition-all duration-200 text-slate-900 dark:text-slate-100 placeholder-slate-400"
+                    placeholder="••••••••"
+                    minLength={6}
+                  />
+                  {isSignUp && (
+                    <p className="mt-2 text-xs text-slate-500 dark:text-slate-400">
+                      Password must be at least 6 characters
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <div className="pt-2">
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  variant="primary"
+                  size="lg"
+                  className="w-full"
+                  loading={loading}
+                >
+                  {isSignUp ? 'Sign Up' : 'Sign In'}
+                </Button>
+              </div>
+
+              <div className="text-center pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsSignUp(!isSignUp)}
+                  className="text-sm font-semibold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent hover:from-indigo-700 hover:to-purple-700 transition-all duration-200"
+                >
+                  {isSignUp
+                    ? 'Already have an account? Sign in'
+                    : "Don't have an account? Sign up"}
+                </button>
+              </div>
+            </form>
+
+            {isSignUp && (
+              <div className="mt-6 p-4 rounded-xl bg-gradient-to-r from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 border border-blue-500/20">
+                <p className="text-sm text-blue-800 dark:text-blue-300">
+                  <span className="font-bold">💡 Note:</span> The first user to sign up will automatically become the admin.
                 </p>
-              )}
-            </div>
+              </div>
+            )}
           </div>
-
-          <div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {loading ? 'Loading...' : isSignUp ? 'Sign Up' : 'Sign In'}
-            </button>
-          </div>
-
-          <div className="text-center">
-            <button
-              type="button"
-              onClick={() => setIsSignUp(!isSignUp)}
-              className="text-sm text-indigo-600 hover:text-indigo-500 font-medium"
-            >
-              {isSignUp
-                ? 'Already have an account? Sign in'
-                : "Don't have an account? Sign up"}
-            </button>
-          </div>
-        </form>
-
-        {isSignUp && (
-          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-800">
-              <span className="font-semibold">Note:</span> The first user to sign up will automatically become the admin.
-            </p>
-          </div>
-        )}
+        </div>
       </div>
-    </div>
+    </>
   )
 }

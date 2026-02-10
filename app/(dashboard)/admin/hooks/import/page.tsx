@@ -4,6 +4,7 @@ import { useState } from 'react'
 import Papa from 'papaparse'
 import { bulkCreateHooks, type BulkImportResult } from '@/lib/actions/hooks'
 import Link from 'next/link'
+import Button from '@/components/ui/button'
 
 interface ParsedHook {
   text: string
@@ -152,41 +153,43 @@ export default function ImportHooksPage() {
   const invalidCount = parsedData.filter(h => h.status === 'invalid').length
 
   return (
-    <div className="max-w-6xl mx-auto">
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">Bulk Import Hooks</h1>
-            <p className="mt-2 text-gray-600">
+    <div className="max-w-6xl mx-auto space-y-8">
+      <div>
+        <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
+          <div className="animate-[slide-up_0.4s_ease-out]">
+            <h1 className="text-4xl font-bold gradient-text mb-2">Bulk Import Hooks</h1>
+            <p className="text-lg text-slate-600 dark:text-slate-400">
               Upload a CSV file to import multiple hooks at once
             </p>
           </div>
-          <Link
-            href="/admin"
-            className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors"
-          >
-            Back to All Hooks
+          <Link href="/admin">
+            <Button variant="ghost" size="md">
+              ← Back
+            </Button>
           </Link>
         </div>
 
         {/* CSV Format Info */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-          <h3 className="font-semibold text-blue-900 mb-2">CSV Format</h3>
-          <p className="text-sm text-blue-800 mb-2">
+        <div className="glass-premium rounded-2xl p-6 mb-6 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 animate-[slide-up_0.5s_ease-out_0.1s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.1s forwards' }}>
+          <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-3 text-lg flex items-center gap-2">
+            <span className="text-xl">📋</span>
+            CSV Format
+          </h3>
+          <p className="text-sm text-slate-700 dark:text-slate-300 mb-4">
             Your CSV file should have one hook per row. You can use either format:
           </p>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <p className="text-xs font-mono text-blue-900 mb-1">Simple (single column):</p>
-              <pre className="text-xs bg-white p-2 rounded border border-blue-200 overflow-x-auto">
+              <p className="text-xs font-mono font-semibold text-slate-900 dark:text-slate-100 mb-2">Simple (single column):</p>
+              <pre className="text-xs glass p-3 rounded-xl overflow-x-auto text-slate-700 dark:text-slate-300">
 text
 Hook text here
 Another hook here
               </pre>
             </div>
             <div>
-              <p className="text-xs font-mono text-blue-900 mb-1">With headers:</p>
-              <pre className="text-xs bg-white p-2 rounded border border-blue-200 overflow-x-auto">
+              <p className="text-xs font-mono font-semibold text-slate-900 dark:text-slate-100 mb-2">With headers:</p>
+              <pre className="text-xs glass p-3 rounded-xl overflow-x-auto text-slate-700 dark:text-slate-300">
 text,notes
 Hook text here,Optional note
 Another hook here,Another note
@@ -196,27 +199,15 @@ Another hook here,Another note
         </div>
 
         {/* File Upload */}
-        <div className="bg-white rounded-lg border-2 border-dashed border-gray-300 p-8">
+        <div className="glass-premium rounded-2xl border-2 border-dashed border-indigo-300 dark:border-indigo-600 p-12 hover:border-indigo-400 dark:hover:border-indigo-500 transition-all duration-300 animate-[slide-up_0.5s_ease-out_0.2s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.2s forwards' }}>
           <div className="text-center">
-            <svg
-              className="mx-auto h-12 w-12 text-gray-400"
-              stroke="currentColor"
-              fill="none"
-              viewBox="0 0 48 48"
-            >
-              <path
-                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <div className="text-6xl mb-6">📁</div>
             <div className="mt-4">
-              <label
-                htmlFor="file-upload"
-                className="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors inline-block"
-              >
-                Choose CSV File
+              <label htmlFor="file-upload">
+                <Button variant="primary" size="lg" className="cursor-pointer">
+                  <span className="text-2xl">📤</span>
+                  Choose CSV File
+                </Button>
               </label>
               <input
                 id="file-upload"
@@ -226,7 +217,7 @@ Another hook here,Another note
                 className="hidden"
               />
             </div>
-            <p className="mt-2 text-sm text-gray-500">
+            <p className="mt-4 text-sm font-medium text-slate-600 dark:text-slate-400">
               {fileName || 'CSV files only'}
             </p>
           </div>

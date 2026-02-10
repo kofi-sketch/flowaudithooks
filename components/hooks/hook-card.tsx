@@ -6,6 +6,8 @@ import { getRandomHook } from '@/lib/actions/hooks'
 import { getSessionId } from '@/lib/utils/session'
 import { toast } from 'sonner'
 import type { Hook } from '@/lib/types/database'
+import Button from '@/components/ui/button'
+import LoadingSpinner from '@/components/ui/loading-spinner'
 
 interface HookCardProps {
   initialHook: Hook
@@ -84,84 +86,88 @@ export default function HookCard({ initialHook }: HookCardProps) {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      {/* Hook Display Card */}
-      <div className="bg-white rounded-2xl shadow-2xl p-8 mb-6 min-h-[280px] flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <p className="text-2xl md:text-3xl font-semibold text-gray-900 leading-relaxed">
-            {hook.text}
-          </p>
+    <div className="w-full max-w-2xl mx-auto animate-[slide-up_0.5s_ease-out]">
+      {/* Hook Display Card - Premium Glassmorphic Design */}
+      <div className="group relative mb-8">
+        <div className="glass-premium rounded-3xl p-10 md:p-12 min-h-[320px] flex items-center justify-center transition-all duration-500 hover:shadow-2xl">
+          <div className="text-center space-y-6">
+            <p className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-100 leading-relaxed tracking-tight">
+              {hook.text}
+            </p>
 
-          {/* Stats Display (small, subtle) */}
-          <div className="flex justify-center gap-4 text-sm text-gray-500 pt-4">
-            <span>
-              {hook.total_votes} {hook.total_votes === 1 ? 'vote' : 'votes'}
-            </span>
-            {hook.total_votes > 0 && (
-              <>
-                <span>•</span>
-                <span className="text-green-600 font-medium">
-                  {hook.green_percentage.toFixed(0)}% positive
+            {/* Stats Display - Enhanced with gradients */}
+            <div className="flex justify-center gap-6 text-sm pt-6">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-800/50">
+                <span className="text-slate-600 dark:text-slate-400">
+                  {hook.total_votes} {hook.total_votes === 1 ? 'vote' : 'votes'}
                 </span>
-              </>
-            )}
+              </div>
+              {hook.total_votes > 0 && (
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500/10 to-green-500/10 dark:from-emerald-500/20 dark:to-green-500/20">
+                  <span className="font-semibold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                    {hook.green_percentage.toFixed(0)}% positive
+                  </span>
+                </div>
+              )}
+            </div>
           </div>
         </div>
+
+        {/* Glow effect on hover */}
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-10 blur-2xl transition-opacity duration-500 -z-10" />
       </div>
 
-      {/* Voting Buttons */}
-      <div className="grid grid-cols-2 gap-4 mb-4">
-        <button
+      {/* Voting Buttons - Premium with gradients */}
+      <div className="grid grid-cols-2 gap-5 mb-5">
+        <Button
           onClick={() => handleVote('green')}
           disabled={loading}
-          className="group relative bg-green-500 hover:bg-green-600 text-white font-semibold py-6 px-6 rounded-xl shadow-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          variant="success"
+          size="xl"
+          className="flex-col !py-8"
         >
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-4xl">✅</span>
-            <span className="text-lg">Worked!</span>
-          </div>
-        </button>
+          <span className="text-5xl mb-2">✅</span>
+          <span className="text-xl">Worked!</span>
+        </Button>
 
-        <button
+        <Button
           onClick={() => handleVote('red')}
           disabled={loading}
-          className="group relative bg-red-500 hover:bg-red-600 text-white font-semibold py-6 px-6 rounded-xl shadow-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+          variant="danger"
+          size="xl"
+          className="flex-col !py-8"
         >
-          <div className="flex flex-col items-center gap-2">
-            <span className="text-4xl">❌</span>
-            <span className="text-lg">Didn't Work</span>
-          </div>
-        </button>
+          <span className="text-5xl mb-2">❌</span>
+          <span className="text-xl">Didn't Work</span>
+        </Button>
       </div>
 
       {/* Secondary Actions */}
-      <div className="grid grid-cols-2 gap-4">
-        <button
+      <div className="grid grid-cols-2 gap-5">
+        <Button
           onClick={() => handleVote('star')}
           disabled={loading}
-          className="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-medium py-4 px-6 rounded-xl shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          variant="warning"
+          size="lg"
         >
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-2xl">⭐</span>
-            <span>Save for Later</span>
-          </div>
-        </button>
+          <span className="text-3xl">⭐</span>
+          <span>Save for Later</span>
+        </Button>
 
-        <button
+        <Button
           onClick={handleSkip}
           disabled={loading}
-          className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-4 px-6 rounded-xl shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          variant="ghost"
+          size="lg"
         >
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-2xl">→</span>
-            <span>Skip</span>
-          </div>
-        </button>
+          <span className="text-3xl">→</span>
+          <span>Skip</span>
+        </Button>
       </div>
 
       {loading && (
-        <div className="text-center mt-6 text-gray-500">
-          <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-600"></div>
+        <div className="mt-8">
+          <LoadingSpinner size="lg" />
         </div>
       )}
     </div>

@@ -84,96 +84,127 @@ export default function HookStatsTable({ hooks: initialHooks }: HookStatsTablePr
   const SortButton = ({ field, label }: { field: keyof Hook; label: string }) => (
     <button
       onClick={() => handleSort(field)}
-      className="flex items-center gap-1 hover:text-indigo-600 transition-colors"
+      className="flex items-center gap-2 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors group"
     >
-      {label}
+      <span className="font-semibold">{label}</span>
       {sortField === field && (
-        <span className="text-xs">{sortDirection === 'asc' ? '↑' : '↓'}</span>
+        <span className="text-lg transition-transform duration-300 group-hover:scale-110">
+          {sortDirection === 'asc' ? '↑' : '↓'}
+        </span>
       )}
     </button>
   )
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
+    <div className="glass-premium rounded-2xl overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <table className="min-w-full">
+          <thead>
+            <tr className="border-b border-slate-200 dark:border-slate-700">
+              <th className="px-6 py-5 text-left text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider bg-gradient-to-r from-slate-50 to-transparent dark:from-slate-800/50 dark:to-transparent">
                 <SortButton field="text" label="Hook Text" />
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-5 text-left text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider bg-gradient-to-r from-slate-50 to-transparent dark:from-slate-800/50 dark:to-transparent">
                 <SortButton field="total_votes" label="Total Votes" />
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-5 text-left text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider bg-gradient-to-r from-slate-50 to-transparent dark:from-slate-800/50 dark:to-transparent">
                 <SortButton field="green_votes" label="Green" />
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-5 text-left text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider bg-gradient-to-r from-slate-50 to-transparent dark:from-slate-800/50 dark:to-transparent">
                 <SortButton field="red_votes" label="Red" />
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-5 text-left text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider bg-gradient-to-r from-slate-50 to-transparent dark:from-slate-800/50 dark:to-transparent">
                 <SortButton field="green_percentage" label="Success Rate" />
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-5 text-left text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider bg-gradient-to-r from-slate-50 to-transparent dark:from-slate-800/50 dark:to-transparent">
                 <SortButton field="is_flagged" label="Status" />
               </th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-5 text-right text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider bg-gradient-to-r from-slate-50 to-transparent dark:from-slate-800/50 dark:to-transparent">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {sortedHooks.map((hook) => (
-              <tr key={hook.id} className={hook.is_flagged ? 'bg-red-50' : ''}>
-                <td className="px-6 py-4">
-                  <div className="text-sm text-gray-900 max-w-md">{hook.text}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-gray-900">{hook.total_votes}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-green-600 font-medium">{hook.green_votes}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-red-600 font-medium">{hook.red_votes}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div
-                    className={`text-sm font-semibold ${
-                      hook.green_percentage >= 60
-                        ? 'text-green-600'
-                        : hook.green_percentage >= 40
-                        ? 'text-yellow-600'
-                        : 'text-red-600'
-                    }`}
-                  >
-                    {hook.green_percentage.toFixed(0)}%
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
+            {sortedHooks.map((hook, index) => (
+              <tr
+                key={hook.id}
+                className={`transition-all duration-200 hover:bg-gradient-to-r hover:from-indigo-50/50 hover:to-transparent dark:hover:from-indigo-900/20 dark:hover:to-transparent ${
+                  hook.is_flagged ? 'bg-rose-50/50 dark:bg-rose-900/10' : index % 2 === 0 ? 'bg-slate-50/30 dark:bg-slate-800/20' : ''
+                }`}
+              >
+                <td className="px-6 py-5">
+                  <div className="text-sm font-medium text-slate-900 dark:text-slate-100 max-w-md leading-relaxed">
+                    {hook.text}
                   </div>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="px-6 py-5 whitespace-nowrap">
+                  <div className="text-sm font-bold text-slate-900 dark:text-slate-100">{hook.total_votes}</div>
+                </td>
+                <td className="px-6 py-5 whitespace-nowrap">
+                  <div className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-emerald-500/10 to-green-500/10 dark:from-emerald-500/20 dark:to-green-500/20">
+                    <span className="text-sm font-bold bg-gradient-to-r from-emerald-600 to-green-600 bg-clip-text text-transparent">
+                      {hook.green_votes}
+                    </span>
+                  </div>
+                </td>
+                <td className="px-6 py-5 whitespace-nowrap">
+                  <div className="inline-flex items-center px-3 py-1 rounded-full bg-gradient-to-r from-rose-500/10 to-red-500/10 dark:from-rose-500/20 dark:to-red-500/20">
+                    <span className="text-sm font-bold bg-gradient-to-r from-rose-600 to-red-600 bg-clip-text text-transparent">
+                      {hook.red_votes}
+                    </span>
+                  </div>
+                </td>
+                <td className="px-6 py-5 whitespace-nowrap">
+                  <div className="flex items-center gap-2">
+                    <div className="w-24 h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all duration-500 ${
+                          hook.green_percentage >= 60
+                            ? 'bg-gradient-to-r from-emerald-500 to-green-600'
+                            : hook.green_percentage >= 40
+                            ? 'bg-gradient-to-r from-amber-400 to-orange-500'
+                            : 'bg-gradient-to-r from-rose-500 to-red-600'
+                        }`}
+                        style={{ width: `${hook.green_percentage}%` }}
+                      />
+                    </div>
+                    <span
+                      className={`text-sm font-bold ${
+                        hook.green_percentage >= 60
+                          ? 'text-green-600 dark:text-green-400'
+                          : hook.green_percentage >= 40
+                          ? 'text-amber-600 dark:text-amber-400'
+                          : 'text-red-600 dark:text-red-400'
+                      }`}
+                    >
+                      {hook.green_percentage.toFixed(0)}%
+                    </span>
+                  </div>
+                </td>
+                <td className="px-6 py-5 whitespace-nowrap">
                   {hook.is_flagged ? (
-                    <div className="flex items-center gap-2">
-                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
-                        Flagged
+                    <div className="flex items-center gap-3">
+                      <span className="px-3 py-1.5 text-xs font-bold rounded-full bg-gradient-to-r from-rose-500/20 to-red-500/20 text-rose-700 dark:text-rose-300 shadow-sm">
+                        🚩 Flagged
                       </span>
                       <button
                         onClick={() => handleUnflag(hook.id)}
-                        className="text-xs text-indigo-600 hover:text-indigo-800"
+                        className="text-xs font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors"
                       >
                         Unflag
                       </button>
                     </div>
                   ) : (
-                    <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
-                      Active
+                    <span className="px-3 py-1.5 text-xs font-bold rounded-full bg-gradient-to-r from-emerald-500/20 to-green-500/20 text-emerald-700 dark:text-emerald-300 shadow-sm">
+                      ✓ Active
                     </span>
                   )}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <td className="px-6 py-5 whitespace-nowrap text-right">
                   <button
                     onClick={() => handleDelete(hook.id, hook.text)}
                     disabled={deletingId === hook.id}
-                    className="text-red-600 hover:text-red-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="px-4 py-2 text-sm font-semibold text-rose-600 dark:text-rose-400 hover:text-white hover:bg-gradient-to-r hover:from-rose-500 hover:to-red-600 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg"
                   >
                     {deletingId === hook.id ? 'Deleting...' : 'Delete'}
                   </button>
