@@ -2,15 +2,15 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, TestTube, Bookmark, BarChart3, Settings, Menu, X } from 'lucide-react';
+import { LayoutDashboard, TestTube, Bookmark, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { name: 'Test Interface', href: '/test', icon: TestTube },
-  { name: 'Saved Hooks', href: '/saved', icon: Bookmark },
-  { name: 'Analytics', href: '/admin', icon: BarChart3 },
-  { name: 'Settings', href: '#', icon: Settings, disabled: true },
+  { name: 'Test Hooks', href: '/test/hooks', icon: TestTube },
+  { name: 'Test Bridges', href: '/test/bridges', icon: TestTube },
+  { name: 'Test Follow-ups', href: '/test/follow-ups', icon: TestTube },
+  { name: 'Saved Content', href: '/saved', icon: Bookmark },
 ];
 
 export function Sidebar() {
@@ -33,7 +33,7 @@ export function Sidebar() {
           return (
             <Link
               key={item.name}
-              href={item.disabled ? '#' : item.href}
+              href={item.href}
               onClick={() => setMobileMenuOpen(false)}
               className={`
                 flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium
@@ -42,9 +42,7 @@ export function Sidebar() {
                   ? 'bg-[#3a3a3a] text-white'
                   : 'text-[#a0a0a0] hover:bg-[#3a3a3a] hover:text-white'
                 }
-                ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}
               `}
-              aria-disabled={item.disabled}
             >
               <Icon className="w-5 h-5" />
               <span>{item.name}</span>

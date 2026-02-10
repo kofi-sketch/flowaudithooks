@@ -2,14 +2,14 @@
 
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
-import type { Hook } from '@/lib/types/database'
+import type { Hook, ContentType } from '@/lib/types/database'
 
-export async function getRandomHook(excludedIds: string[] = []): Promise<Hook | null> {
+export async function getRandomHook(excludedIds: string[] = [], contentType: ContentType = 'hook'): Promise<Hook | null> {
   const supabase = await createClient()
 
   // Call the database function to get a random hook
   const { data, error } = await supabase
-    .rpc('get_random_hook', { excluded_ids: excludedIds })
+    .rpc('get_random_hook', { excluded_ids: excludedIds, p_content_type: contentType })
 
   if (error) {
     console.error('Error fetching random hook:', error)
@@ -17,10 +17,11 @@ export async function getRandomHook(excludedIds: string[] = []): Promise<Hook | 
   }
 
   if (!data || data.length === 0) {
-    // If no hooks available (or all excluded), try fetching any hook
+    // If no hooks available (or all excluded), try fetching any hook of this type
     const { data: anyHook, error: anyError } = await supabase
       .from('hooks')
       .select('*')
+      .eq('content_type', contentType)
       .limit(1)
       .single()
 
@@ -50,14 +51,40 @@ export async function getAllHooks(): Promise<Hook[]> {
   return data || []
 }
 
-export async function getFlaggedHooks(): Promise<Hook[]> {
+export async function getAllHooksByType(contentType?: ContentType): Promise<Hook[]> {
   const supabase = await createClient()
 
-  const { data, error } = await supabase
+  let query = supabase
+    .from('hooks')
+    .select('*')
+
+  if (contentType) {
+    query = query.eq('content_type', contentType)
+  }
+
+  const { data, error } = await query.order('created_at', { ascending: false })
+
+  if (error) {
+    console.error('Error fetching hooks by type:', error)
+    return []
+  }
+
+  return data || []
+}
+
+export async function getFlaggedHooks(contentType?: ContentType): Promise<Hook[]> {
+  const supabase = await createClient()
+
+  let query = supabase
     .from('hooks')
     .select('*')
     .eq('is_flagged', true)
-    .order('green_percentage', { ascending: true })
+
+  if (contentType) {
+    query = query.eq('content_type', contentType)
+  }
+
+  const { data, error } = await query.order('green_percentage', { ascending: true })
 
   if (error) {
     console.error('Error fetching flagged hooks:', error)
@@ -67,7 +94,7 @@ export async function getFlaggedHooks(): Promise<Hook[]> {
   return data || []
 }
 
-export async function createHook(text: string) {
+export async function createHook(text: string, contentType: ContentType = 'hook') {
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
@@ -89,7 +116,7 @@ export async function createHook(text: string) {
 
   const { data, error } = await supabase
     .from('hooks')
-    .insert({ text, created_by: user.id })
+    .insert({ text, created_by: user.id, content_type: contentType })
     .select()
     .single()
 
@@ -216,7 +243,7 @@ export interface BulkImportResult {
   errors: Array<{ row: number; text: string; reason: string }>
 }
 
-export async function bulkCreateHooks(hooksData: Array<{ text: string }>): Promise<BulkImportResult> {
+export async function bulkCreateHooks(hooksData: Array<{ text: string }>, contentType: ContentType = 'hook'): Promise<BulkImportResult> {
   const supabase = await createClient()
 
   const { data: { user } } = await supabase.auth.getUser()
@@ -246,14 +273,15 @@ export async function bulkCreateHooks(hooksData: Array<{ text: string }>): Promi
     }
   }
 
-  const validHooks: Array<{ text: string; created_by: string }> = []
+  const validHooks: Array<{ text: string; created_by: string; content_type: ContentType }> = []
   const errors: Array<{ row: number; text: string; reason: string }> = []
   let skipped = 0
 
-  // Get all existing hook texts for duplicate checking
+  // Get existing hook texts for this content type only
   const { data: existingHooks } = await supabase
     .from('hooks')
     .select('text')
+    .eq('content_type', contentType)
 
   const existingTexts = new Set(
     existingHooks?.map(h => h.text.trim().toLowerCase()) || []
@@ -285,14 +313,14 @@ export async function bulkCreateHooks(hooksData: Array<{ text: string }>): Promi
       continue
     }
 
-    // Duplicate check
+    // Duplicate check (scoped to content type)
     if (existingTexts.has(trimmedText.toLowerCase())) {
       skipped++
       continue
     }
 
     // Add to valid hooks
-    validHooks.push({ text: trimmedText, created_by: user.id })
+    validHooks.push({ text: trimmedText, created_by: user.id, content_type: contentType })
 
     // Add to existing texts to prevent duplicates within the same batch
     existingTexts.add(trimmedText.toLowerCase())
@@ -326,4 +354,51 @@ export async function bulkCreateHooks(hooksData: Array<{ text: string }>): Promi
     skipped,
     errors
   }
+}
+
+export async function getTopContentToday(contentType: ContentType, limit = 5): Promise<Hook[]> {
+  const supabase = await createClient()
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const { data, error } = await supabase
+    .from('hooks')
+    .select('*')
+    .eq('content_type', contentType)
+    .gte('created_at', today.toISOString())
+    .order('green_percentage', { ascending: false })
+    .order('total_votes', { ascending: false })
+    .limit(limit)
+
+  if (error) {
+    console.error('Error fetching top content today:', error)
+    return []
+  }
+
+  // Filter to only show items with at least 1 vote
+  return (data || []).filter(item => item.total_votes > 0)
+}
+
+export async function getTopContentThisWeek(contentType: ContentType, limit = 5): Promise<Hook[]> {
+  const supabase = await createClient()
+  const weekAgo = new Date()
+  weekAgo.setDate(weekAgo.getDate() - 7)
+  weekAgo.setHours(0, 0, 0, 0)
+
+  const { data, error } = await supabase
+    .from('hooks')
+    .select('*')
+    .eq('content_type', contentType)
+    .gte('created_at', weekAgo.toISOString())
+    .order('green_percentage', { ascending: false })
+    .order('total_votes', { ascending: false })
+    .limit(limit)
+
+  if (error) {
+    console.error('Error fetching top content this week:', error)
+    return []
+  }
+
+  // Filter to only show items with at least 1 vote
+  return (data || []).filter(item => item.total_votes > 0)
 }

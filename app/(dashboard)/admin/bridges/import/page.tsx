@@ -14,7 +14,7 @@ interface ParsedHook {
   row: number
 }
 
-export default function ImportHooksPage() {
+export default function ImportBridgesPage() {
   const [parsedData, setParsedData] = useState<ParsedHook[]>([])
   const [importing, setImporting] = useState(false)
   const [results, setResults] = useState<BulkImportResult | null>(null)
@@ -139,7 +139,7 @@ export default function ImportHooksPage() {
       .filter(h => h.status === 'valid')
       .map(h => ({ text: h.text }))
 
-    const result = await bulkCreateHooks(validHooks, 'hook')
+    const result = await bulkCreateHooks(validHooks, 'bridge')
     setResults(result)
     setImporting(false)
 
@@ -158,9 +158,9 @@ export default function ImportHooksPage() {
       <div>
         <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
           <div className="animate-[slide-up_0.4s_ease-out]">
-            <h1 className="text-[32px] font-semibold text-white mb-2">Bulk Import Hooks</h1>
+            <h1 className="text-[32px] font-semibold text-white mb-2">Bulk Import Bridges</h1>
             <p className="text-base text-[#a0a0a0]">
-              Upload a CSV file to import multiple hooks at once
+              Upload a CSV file to import multiple bridges at once
             </p>
           </div>
           <Link href="/admin">
@@ -177,23 +177,23 @@ export default function ImportHooksPage() {
             CSV Format
           </h3>
           <p className="text-sm text-[#a0a0a0] mb-4">
-            Your CSV file should have one hook per row. You can use either format:
+            Your CSV file should have one bridge per row. You can use either format:
           </p>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <p className="text-xs font-mono font-medium text-white mb-2">Simple (single column):</p>
               <pre className="text-xs bg-[#2d2d2d] border border-[#353535] p-3 rounded-lg overflow-x-auto text-[#a0a0a0]">
 text
-Hook text here
-Another hook here
+Bridge text here
+Another bridge here
               </pre>
             </div>
             <div>
               <p className="text-xs font-mono font-medium text-white mb-2">With headers:</p>
               <pre className="text-xs bg-[#2d2d2d] border border-[#353535] p-3 rounded-lg overflow-x-auto text-[#a0a0a0]">
 text,notes
-Hook text here,Optional note
-Another hook here,Another note
+Bridge text here,Optional note
+Another bridge here,Another note
               </pre>
             </div>
           </div>
@@ -241,7 +241,7 @@ Another hook here,Another note
               variant="primary"
               size="md"
             >
-              {importing ? 'Importing...' : `Import ${validCount} Hooks`}
+              {importing ? 'Importing...' : `Import ${validCount} Bridges`}
             </Button>
           </div>
 
@@ -256,7 +256,7 @@ Another hook here,Another note
                     Status
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-[#a0a0a0] uppercase tracking-wider bg-[#2a2a2a]">
-                    Hook Text
+                    Bridge Text
                   </th>
                 </tr>
               </thead>
@@ -305,7 +305,7 @@ Another hook here,Another note
           <div className="grid md:grid-cols-3 gap-4 mb-6">
             <div className="bg-[#2a2a2a] border border-[#353535] rounded-lg p-4">
               <div className="text-3xl font-bold text-white">{results.created}</div>
-              <div className="text-sm text-[#a0a0a0]">Hooks Created</div>
+              <div className="text-sm text-[#a0a0a0]">Bridges Created</div>
             </div>
 
             <div className="bg-[#2a2a2a] border border-[#353535] rounded-lg p-4">
@@ -339,7 +339,7 @@ Another hook here,Another note
           <div className="mt-6 flex gap-3">
             <Link href="/admin">
               <Button variant="primary" size="md">
-                View All Hooks
+                View All Bridges
               </Button>
             </Link>
             <Button

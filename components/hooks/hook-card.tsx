@@ -6,16 +6,17 @@ import { getRandomHook } from '@/lib/actions/hooks'
 import { saveHook, unsaveHook, isSaved } from '@/lib/actions/saved-hooks'
 import { getSessionId } from '@/lib/utils/session'
 import { toast } from 'sonner'
-import type { Hook } from '@/lib/types/database'
+import type { Hook, ContentType } from '@/lib/types/database'
 import Button from '@/components/ui/button'
 import LoadingSpinner from '@/components/ui/loading-spinner'
 import { ThumbsUp, ThumbsDown, Bookmark } from 'lucide-react'
 
 interface HookCardProps {
   initialHook: Hook
+  contentType: ContentType
 }
 
-export default function HookCard({ initialHook }: HookCardProps) {
+export default function HookCard({ initialHook, contentType }: HookCardProps) {
   const [hook, setHook] = useState<Hook>(initialHook)
   const [recentIds, setRecentIds] = useState<string[]>([initialHook.id])
   const [loading, setLoading] = useState(false)
@@ -42,7 +43,7 @@ export default function HookCard({ initialHook }: HookCardProps) {
     try {
       // Exclude the last 10 hooks
       const excludeIds = recentIds.slice(-10)
-      const nextHook = await getRandomHook(excludeIds)
+      const nextHook = await getRandomHook(excludeIds, contentType)
 
       if (nextHook) {
         setHook(nextHook)

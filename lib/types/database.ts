@@ -6,6 +6,8 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+export type ContentType = 'hook' | 'bridge' | 'followup'
+
 export interface Database {
   public: {
     Tables: {
@@ -41,6 +43,7 @@ export interface Database {
           created_by: string | null
           created_at: string
           updated_at: string
+          content_type: ContentType
         }
         Insert: {
           id?: string
@@ -52,6 +55,7 @@ export interface Database {
           created_by?: string | null
           created_at?: string
           updated_at?: string
+          content_type?: ContentType
         }
         Update: {
           id?: string
@@ -63,6 +67,7 @@ export interface Database {
           created_by?: string | null
           created_at?: string
           updated_at?: string
+          content_type?: ContentType
         }
       }
       votes: {
@@ -93,6 +98,7 @@ export interface Database {
       get_random_hook: {
         Args: {
           excluded_ids?: string[]
+          p_content_type?: ContentType
         }
         Returns: {
           id: string
@@ -103,6 +109,7 @@ export interface Database {
           green_percentage: number
           is_flagged: boolean
           created_at: string
+          content_type: ContentType
         }[]
       }
     }

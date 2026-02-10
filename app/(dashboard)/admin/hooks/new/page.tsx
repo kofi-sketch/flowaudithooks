@@ -6,10 +6,13 @@ import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import Link from 'next/link'
 import Button from '@/components/ui/button'
-import { ArrowLeft, Lightbulb, Target } from 'lucide-react'
+import { ArrowLeft, Lightbulb, Target, Upload } from 'lucide-react'
+import type { ContentType } from '@/lib/types/database'
+import { CONTENT_TYPE_SINGULAR_LABELS } from '@/lib/constants/content-types'
 
 export default function NewHookPage() {
   const [text, setText] = useState('')
+  const [contentType, setContentType] = useState<ContentType>('hook')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
@@ -23,14 +26,14 @@ export default function NewHookPage() {
 
     setLoading(true)
     try {
-      const result = await createHook(text.trim())
+      const result = await createHook(text.trim(), contentType)
 
       if (result.success) {
-        toast.success('Hook added successfully!')
+        toast.success(`${CONTENT_TYPE_SINGULAR_LABELS[contentType]} added successfully!`)
         router.push('/admin')
         router.refresh()
       } else {
-        toast.error(result.error || 'Failed to add hook')
+        toast.error(result.error || `Failed to add ${CONTENT_TYPE_SINGULAR_LABELS[contentType].toLowerCase()}`)
       }
     } catch (error) {
       toast.error('An error occurred')
@@ -52,15 +55,36 @@ export default function NewHookPage() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-4">
         <div className="animate-[slide-up_0.4s_ease-out]">
-          <h1 className="text-[32px] font-semibold text-white mb-2">Add New Hook</h1>
+          <h1 className="text-[32px] font-semibold text-white mb-2">Add New Content</h1>
           <p className="text-base text-[#a0a0a0]">
-            Add a marketing hook to test with your audience
+            Add marketing content to test with your audience
           </p>
         </div>
 
-        <Link href="/admin">
-          <Button variant="ghost" size="sm" icon={<ArrowLeft className="w-4 h-4" />}>
-            Back
+        <div className="flex items-center gap-3">
+          <Link href="/admin">
+            <Button variant="ghost" size="sm" icon={<ArrowLeft className="w-4 h-4" />}>
+              Back
+            </Button>
+          </Link>
+        </div>
+      </div>
+
+      {/* Import Links */}
+      <div className="flex gap-3 animate-[slide-up_0.4s_ease-out_0.05s] opacity-0" style={{ animation: 'slide-up 0.4s ease-out 0.05s forwards' }}>
+        <Link href="/admin/hooks/import" className="flex-1">
+          <Button variant="outline" size="sm" icon={<Upload className="w-4 h-4" />} className="w-full">
+            Import Hooks CSV
+          </Button>
+        </Link>
+        <Link href="/admin/bridges/import" className="flex-1">
+          <Button variant="outline" size="sm" icon={<Upload className="w-4 h-4" />} className="w-full">
+            Import Bridges CSV
+          </Button>
+        </Link>
+        <Link href="/admin/follow-ups/import" className="flex-1">
+          <Button variant="outline" size="sm" icon={<Upload className="w-4 h-4" />} className="w-full">
+            Import Follow-ups CSV
           </Button>
         </Link>
       </div>
@@ -69,8 +93,24 @@ export default function NewHookPage() {
       <div className="crm-card animate-[slide-up_0.5s_ease-out_0.1s] opacity-0" style={{ animation: 'slide-up 0.5s ease-out 0.1s forwards' }}>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
+            <label htmlFor="content-type" className="block text-sm font-medium text-white mb-3">
+              Content Type
+            </label>
+            <select
+              id="content-type"
+              value={contentType}
+              onChange={(e) => setContentType(e.target.value as ContentType)}
+              className="block w-full px-5 py-4 bg-[#2a2a2a] border border-[#353535] rounded-lg focus:border-[#404040] focus:outline-none transition-colors text-white text-base"
+            >
+              <option value="hook">Hook</option>
+              <option value="bridge">Bridge</option>
+              <option value="followup">Follow-up</option>
+            </select>
+          </div>
+
+          <div>
             <label htmlFor="hook-text" className="block text-sm font-medium text-white mb-3">
-              Hook Text
+              {CONTENT_TYPE_SINGULAR_LABELS[contentType]} Text
             </label>
             <textarea
               id="hook-text"
@@ -78,7 +118,7 @@ export default function NewHookPage() {
               onChange={(e) => setText(e.target.value)}
               rows={5}
               className="block w-full px-5 py-4 bg-[#2a2a2a] border border-[#353535] rounded-lg focus:border-[#404040] focus:outline-none transition-colors text-white placeholder-[#6b6b6b] resize-none text-base"
-              placeholder="Enter your marketing hook here..."
+              placeholder={`Enter your ${CONTENT_TYPE_SINGULAR_LABELS[contentType].toLowerCase()} here...`}
               required
             />
             <div className="mt-3 flex items-center justify-between">
@@ -100,7 +140,7 @@ export default function NewHookPage() {
               className="flex-1"
               loading={loading}
             >
-              Add Hook
+              Add {CONTENT_TYPE_SINGULAR_LABELS[contentType]}
             </Button>
 
             <Button

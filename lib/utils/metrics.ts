@@ -1,6 +1,7 @@
 interface Hook {
   total_votes: number;
   green_percentage: number;
+  content_type?: string;
 }
 
 export function calculateDashboardMetrics(hooks: Hook[]) {

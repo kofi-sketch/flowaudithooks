@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "@fontsource/space-grotesk/400.css";
+@import "@fontsource/space-grotesk/600.css";
 @import "@fontsource/inter/400.css";
 @import "@fontsource/inter/600.css";
 
@@ -113,7 +115,7 @@ textarea::placeholder {
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: "Space Grotesk", "Space Grotesk Fallback", Inter, "Inter Fallback", system-ui, sans-serif;
   font-feature-settings: 'rlig' 1, 'calt' 1;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
