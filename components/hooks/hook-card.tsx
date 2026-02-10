@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { submitVote } from '@/lib/actions/votes'
 import { getRandomHook } from '@/lib/actions/hooks'
+import { saveHook, unsaveHook, isSaved } from '@/lib/actions/saved-hooks'
 import { getSessionId } from '@/lib/utils/session'
 import { toast } from 'sonner'
 import type { Hook } from '@/lib/types/database'
@@ -18,10 +19,22 @@ export default function HookCard({ initialHook }: HookCardProps) {
   const [recentIds, setRecentIds] = useState<string[]>([initialHook.id])
   const [loading, setLoading] = useState(false)
   const [sessionId, setSessionId] = useState<string>('')
+  const [saved, setSaved] = useState(false)
+  const [savingLoading, setSavingLoading] = useState(false)
 
   useEffect(() => {
     setSessionId(getSessionId())
+    checkIfSaved()
   }, [])
+
+  useEffect(() => {
+    checkIfSaved()
+  }, [hook.id])
+
+  const checkIfSaved = async () => {
+    const result = await isSaved(hook.id)
+    setSaved(result.isSaved)
+  }
 
   const loadNextHook = async () => {
     setLoading(true)
@@ -85,6 +98,26 @@ export default function HookCard({ initialHook }: HookCardProps) {
     loadNextHook()
   }
 
+  const handleSaveToggle = async () => {
+    setSavingLoading(true)
+    try {
+      const result = saved
+        ? await unsaveHook(hook.id)
+        : await saveHook(hook.id)
+
+      if ('error' in result) {
+        toast.error(result.error)
+      } else {
+        setSaved(!saved)
+        toast.success(saved ? 'Hook unsaved' : 'Hook saved!')
+      }
+    } catch (error) {
+      toast.error('Failed to save hook')
+    } finally {
+      setSavingLoading(false)
+    }
+  }
+
   return (
     <div className="w-full max-w-2xl mx-auto animate-[slide-up_0.5s_ease-out]">
       {/* Hook Display Card - Premium Glassmorphic Design */}
@@ -145,13 +178,13 @@ export default function HookCard({ initialHook }: HookCardProps) {
       {/* Secondary Actions */}
       <div className="grid grid-cols-2 gap-5">
         <Button
-          onClick={() => handleVote('star')}
-          disabled={loading}
-          variant="warning"
+          onClick={handleSaveToggle}
+          disabled={loading || savingLoading}
+          variant={saved ? "success" : "warning"}
           size="lg"
         >
-          <span className="text-3xl">⭐</span>
-          <span>Save for Later</span>
+          <span className="text-3xl">{saved ? '💾' : '⭐'}</span>
+          <span>{saved ? 'Saved!' : 'Save'}</span>
         </Button>
 
         <Button

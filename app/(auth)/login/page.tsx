@@ -1,18 +1,32 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { signIn, signUp } from '@/lib/actions/auth'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import GradientBackground from '@/components/ui/gradient-background'
 import Button from '@/components/ui/button'
+import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
   const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const router = useRouter()
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        setIsLoggedIn(true)
+        router.push('/test')
+      }
+    }
+    checkAuth()
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -124,14 +138,6 @@ export default function LoginPage() {
                 </button>
               </div>
             </form>
-
-            {isSignUp && (
-              <div className="mt-6 p-4 rounded-xl bg-gradient-to-r from-blue-500/10 to-cyan-500/10 dark:from-blue-500/20 dark:to-cyan-500/20 border border-blue-500/20">
-                <p className="text-sm text-blue-800 dark:text-blue-300">
-                  <span className="font-bold">💡 Note:</span> The first user to sign up will automatically become the admin.
-                </p>
-              </div>
-            )}
           </div>
         </div>
       </div>
